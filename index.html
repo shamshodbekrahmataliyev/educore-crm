@@ -1,267 +1,359 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EduCore CRM - Ta'lim Markazi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <style>[v-cloak]{display:none}.sidebar-item:hover{background:rgba(255,255,255,0.1)}.sidebar-item.active{background:rgba(255,255,255,0.2)}</style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EduCore – Ta'lim Markazi CRM</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
+body{background:#f1f5f9;display:flex;height:100vh;overflow:hidden}
+#sidebar{width:240px;background:#065f46;color:#fff;display:flex;flex-direction:column;flex-shrink:0}
+#sidebar .logo{padding:20px;border-bottom:1px solid rgba(255,255,255,.15)}
+#sidebar .logo h1{font-size:22px;font-weight:700}
+#sidebar .logo p{font-size:12px;color:#6ee7b7;margin-top:4px}
+#sidebar nav button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border:none;background:transparent;color:#fff;cursor:pointer;border-radius:10px;font-size:14px;text-align:left;transition:.2s;margin-bottom:2px}
+#sidebar nav button:hover{background:rgba(255,255,255,.12)}
+#sidebar nav button.active{background:rgba(255,255,255,.22);font-weight:600}
+#sidebar nav{flex:1;padding:12px}
+#sidebar .stats{padding:14px;border-top:1px solid rgba(255,255,255,.15);font-size:12px;color:#6ee7b7;line-height:1.8}
+#sidebar .stats strong{color:#fff}
+#main{flex:1;overflow-y:auto}
+.page{display:none;padding:24px}.page.active{display:block}
+h2.pt{font-size:22px;font-weight:700;color:#1e293b;margin-bottom:20px}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.ph h2{margin-bottom:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:24px}
+.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-left:4px solid #3b82f6}
+.card.g{border-color:#22c55e}.card.p{border-color:#a855f7}.card.o{border-color:#f97316}.card.r{border-color:#ef4444}
+.card .v{font-size:28px;font-weight:700;color:#1e293b}.card .l{font-size:13px;color:#64748b;margin-top:4px}
+.tbl{background:#fff;border-radius:16px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{background:#f8fafc;padding:12px 16px;text-align:left;font-size:13px;color:#64748b;font-weight:600}
+tbody td{padding:11px 16px;border-top:1px solid #f1f5f9;font-size:14px}
+tbody tr:hover{background:#f8fafc}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.bg{background:#dcfce7;color:#16a34a}.br{background:#fee2e2;color:#dc2626}.bb{background:#dbeafe;color:#1d4ed8}.by{background:#fef9c3;color:#a16207}.bgr{background:#f3f4f6;color:#374151}
+.btn{padding:9px 20px;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s}
+.bp{background:#065f46;color:#fff}.bp:hover{background:#047857}
+.bbl{background:#2563eb;color:#fff}.bbl:hover{background:#1d4ed8}
+.bgray{background:#e2e8f0;color:#475569}.bgray:hover{background:#cbd5e1}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:28px;width:460px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:18px;color:#1e293b}
+.mf{display:flex;gap:10px;margin-top:20px}.mf button{flex:1}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.fg label{font-size:13px;font-weight:600;color:#475569}
+input,select{padding:10px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:14px;outline:none;transition:.2s;width:100%}
+input:focus,select:focus{border-color:#065f46;box-shadow:0 0 0 3px rgba(6,95,70,.12)}
+.fr{display:flex;gap:12px}.fr .fg{flex:1}
+#toast{position:fixed;bottom:24px;right:24px;background:#065f46;color:#fff;padding:14px 22px;border-radius:14px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(100px);opacity:0;transition:.3s;z-index:9999}
+#toast.show{transform:translateY(0);opacity:1}
+.attend-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f1f5f9}
+.attend-btns button{padding:6px 14px;border:none;border-radius:8px;cursor:pointer;font-size:13px;margin-left:6px;font-weight:600;transition:.2s}
+.att-present{background:#dcfce7;color:#16a34a}.att-present.active{background:#16a34a;color:#fff}
+.att-absent{background:#fee2e2;color:#dc2626}.att-absent.active{background:#dc2626;color:#fff}
+.prog-bar{background:#e2e8f0;border-radius:999px;height:8px;margin-top:6px}
+.prog-fill{background:#065f46;height:8px;border-radius:999px;transition:.4s}
+</style>
 </head>
-<body class="bg-gray-100 font-sans" v-cloak>
-<div id="app">
-  <div class="flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <div class="w-64 bg-emerald-800 text-white flex flex-col shrink-0">
-      <div class="p-5 border-b border-emerald-700">
-        <h1 class="text-2xl font-bold">🎓 EduCore</h1>
-        <p class="text-emerald-300 text-sm mt-1">Ta'lim markazi CRM</p>
-      </div>
-      <nav class="flex-1 p-4 space-y-1">
-        <button v-for="item in menu" :key="item.id" @click="page=item.id"
-          :class="['sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition', page===item.id?'active font-semibold':'']">
-          <span class="text-xl">{{item.icon}}</span> {{item.label}}
-        </button>
-      </nav>
-      <div class="p-4 border-t border-emerald-700 text-emerald-300 text-sm">
-        O'quvchilar: <strong class="text-white">{{students.length}}</strong><br>
-        Kurslar: <strong class="text-white">{{courses.length}}</strong>
-      </div>
-    </div>
+<body>
+<div id="sidebar">
+  <div class="logo"><h1>🎓 EduCore</h1><p>Ta'lim markazi CRM</p></div>
+  <nav id="snav"></nav>
+  <div class="stats" id="sstat"></div>
+</div>
+<div id="main">
 
-    <!-- Main -->
-    <div class="flex-1 overflow-auto">
-
-      <!-- Dashboard -->
-      <div v-if="page==='dashboard'" class="p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Dashboard</h2>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-emerald-500">
-            <div class="text-3xl font-bold text-emerald-600">{{students.length}}</div>
-            <div class="text-gray-500 mt-1">O'quvchilar</div>
-          </div>
-          <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-blue-500">
-            <div class="text-3xl font-bold text-blue-600">{{courses.length}}</div>
-            <div class="text-gray-500 mt-1">Kurslar</div>
-          </div>
-          <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-purple-500">
-            <div class="text-3xl font-bold text-purple-600">{{payments.length}}</div>
-            <div class="text-gray-500 mt-1">To'lovlar</div>
-          </div>
-          <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-yellow-500">
-            <div class="text-3xl font-bold text-yellow-600">{{totalRevenue.toLocaleString()}}</div>
-            <div class="text-gray-500 mt-1">Jami daromad (so'm)</div>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-white rounded-2xl p-5 shadow-sm">
-            <h3 class="font-bold text-gray-700 mb-4">So'nggi o'quvchilar</h3>
-            <div v-for="s in students.slice(-5).reverse()" :key="s.id" class="flex items-center gap-3 py-2 border-b last:border-0">
-              <div class="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold">{{s.name[0]}}</div>
-              <div><div class="font-medium text-sm">{{s.name}}</div><div class="text-xs text-gray-400">{{s.course}}</div></div>
-            </div>
-            <div v-if="students.length===0" class="text-gray-400 text-center py-4">O'quvchi yo'q</div>
-          </div>
-          <div class="bg-white rounded-2xl p-5 shadow-sm">
-            <h3 class="font-bold text-gray-700 mb-4">Kurslar statistikasi</h3>
-            <div v-for="c in courses" :key="c.id" class="mb-3">
-              <div class="flex justify-between text-sm mb-1"><span>{{c.name}}</span><span class="text-gray-500">{{studentsInCourse(c.name)}} o'quvchi</span></div>
-              <div class="bg-gray-100 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full" :style="{width: Math.min(studentsInCourse(c.name)/Math.max(students.length,1)*100,100)+'%'}"></div></div>
-            </div>
-            <div v-if="courses.length===0" class="text-gray-400 text-center py-4">Kurs yo'q</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- O'quvchilar -->
-      <div v-if="page==='students'" class="p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">👨‍🎓 O'quvchilar</h2>
-          <button @click="showAddStudent=true" class="bg-emerald-600 text-white px-5 py-2 rounded-xl hover:bg-emerald-700 transition">+ Qo'shish</button>
-        </div>
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <table class="w-full">
-            <thead class="bg-gray-50 text-gray-600 text-sm">
-              <tr><th class="text-left px-5 py-3">Ism</th><th class="text-left px-5 py-3">Telefon</th><th class="text-left px-5 py-3">Kurs</th><th class="text-left px-5 py-3">Holati</th><th class="text-left px-5 py-3">Amal</th></tr>
-            </thead>
-            <tbody>
-              <tr v-for="s in students" :key="s.id" class="border-t hover:bg-gray-50">
-                <td class="px-5 py-3 font-medium">{{s.name}}</td>
-                <td class="px-5 py-3 text-gray-500">{{s.phone}}</td>
-                <td class="px-5 py-3">{{s.course}}</td>
-                <td class="px-5 py-3"><span :class="s.status==='Faol'?'bg-green-100 text-green-700':'bg-gray-100 text-gray-600'" class="px-2 py-1 rounded-full text-xs">{{s.status}}</span></td>
-                <td class="px-5 py-3"><button @click="deleteStudent(s.id)" class="text-red-500 hover:text-red-700 text-sm">O'chirish</button></td>
-              </tr>
-              <tr v-if="students.length===0"><td colspan="5" class="text-center py-10 text-gray-400">O'quvchi yo'q</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Kurslar -->
-      <div v-if="page==='courses'" class="p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">📚 Kurslar</h2>
-          <button @click="showAddCourse=true" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">+ Kurs</button>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div v-for="c in courses" :key="c.id" class="bg-white rounded-2xl p-5 shadow-sm">
-            <div class="flex justify-between items-start mb-3">
-              <h3 class="font-bold text-gray-800">{{c.name}}</h3>
-              <button @click="deleteCourse(c.id)" class="text-red-400 hover:text-red-600 text-xs">✕</button>
-            </div>
-            <p class="text-gray-500 text-sm mb-3">{{c.teacher}}</p>
-            <div class="flex justify-between text-sm"><span class="text-gray-500">Narxi:</span><span class="font-semibold">{{c.price.toLocaleString()}} so'm</span></div>
-            <div class="flex justify-between text-sm mt-1"><span class="text-gray-500">O'quvchilar:</span><span class="font-semibold text-emerald-600">{{studentsInCourse(c.name)}} kishi</span></div>
-          </div>
-          <div v-if="courses.length===0" class="col-span-full text-center py-10 text-gray-400">Kurs yo'q</div>
-        </div>
-      </div>
-
-      <!-- Davomat -->
-      <div v-if="page==='attendance'" class="p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">✅ Davomat</h2>
-        <div class="bg-white rounded-2xl p-5 shadow-sm mb-4">
-          <div class="flex gap-3 mb-4">
-            <input type="date" v-model="attendanceDate" class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400" />
-            <select v-model="attendanceCourse" class="border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-400">
-              <option value="">Barcha kurslar</option>
-              <option v-for="c in courses" :key="c.id" :value="c.name">{{c.name}}</option>
-            </select>
-          </div>
-          <div v-for="s in filteredStudents" :key="s.id" class="flex items-center justify-between py-3 border-b last:border-0">
-            <span class="font-medium">{{s.name}} <span class="text-gray-400 text-sm">({{s.course}})</span></span>
-            <div class="flex gap-2">
-              <button @click="markAttendance(s.id, 'present')" :class="getAttendance(s.id)==='present'?'bg-green-500 text-white':'bg-green-100 text-green-700'" class="px-3 py-1 rounded-lg text-sm transition">Keldi</button>
-              <button @click="markAttendance(s.id, 'absent')" :class="getAttendance(s.id)==='absent'?'bg-red-500 text-white':'bg-red-100 text-red-700'" class="px-3 py-1 rounded-lg text-sm transition">Kelmadi</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- To'lovlar -->
-      <div v-if="page==='payments'" class="p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">💳 To'lovlar</h2>
-          <button @click="showAddPayment=true" class="bg-purple-600 text-white px-5 py-2 rounded-xl hover:bg-purple-700 transition">+ To'lov</button>
-        </div>
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <table class="w-full">
-            <thead class="bg-gray-50 text-gray-600 text-sm">
-              <tr><th class="text-left px-5 py-3">O'quvchi</th><th class="text-left px-5 py-3">Miqdor</th><th class="text-left px-5 py-3">Oy</th><th class="text-left px-5 py-3">Sana</th><th class="text-left px-5 py-3">Izoh</th></tr>
-            </thead>
-            <tbody>
-              <tr v-for="p in payments" :key="p.id" class="border-t hover:bg-gray-50">
-                <td class="px-5 py-3 font-medium">{{p.studentName}}</td>
-                <td class="px-5 py-3 text-purple-600 font-semibold">{{p.amount.toLocaleString()}} so'm</td>
-                <td class="px-5 py-3 text-gray-500">{{p.month}}</td>
-                <td class="px-5 py-3 text-gray-500">{{p.date}}</td>
-                <td class="px-5 py-3 text-gray-500">{{p.note}}</td>
-              </tr>
-              <tr v-if="payments.length===0"><td colspan="5" class="text-center py-10 text-gray-400">To'lov yo'q</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
+  <!-- DASHBOARD -->
+  <div id="pg-dash" class="page">
+    <h2 class="pt">📊 Dashboard</h2>
+    <div class="cards" id="d-cards"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="tbl" style="padding:20px"><h3 style="font-weight:700;margin-bottom:14px">👨‍🎓 So'nggi o'quvchilar</h3><div id="d-students"></div></div>
+      <div class="tbl" style="padding:20px"><h3 style="font-weight:700;margin-bottom:14px">💳 So'nggi to'lovlar</h3><div id="d-pays"></div></div>
     </div>
   </div>
 
-  <!-- Modal: O'quvchi -->
-  <div v-if="showAddStudent" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-6 w-96 shadow-xl">
-      <h3 class="text-lg font-bold mb-4">Yangi O'quvchi</h3>
-      <input v-model="newStudent.name" placeholder="Ism Familiya" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-emerald-400" />
-      <input v-model="newStudent.phone" placeholder="Telefon" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-emerald-400" />
-      <select v-model="newStudent.course" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-emerald-400">
-        <option value="">Kurs tanlang</option>
-        <option v-for="c in courses" :key="c.id" :value="c.name">{{c.name}}</option>
-      </select>
-      <select v-model="newStudent.status" class="w-full border rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-400">
-        <option>Faol</option><option>Nofaol</option><option>Kutilmoqda</option>
-      </select>
-      <div class="flex gap-3">
-        <button @click="addStudent" class="flex-1 bg-emerald-600 text-white py-2 rounded-xl hover:bg-emerald-700">Qo'shish</button>
-        <button @click="showAddStudent=false" class="flex-1 bg-gray-100 py-2 rounded-xl">Bekor</button>
-      </div>
+  <!-- O'QUVCHILAR -->
+  <div id="pg-students" class="page">
+    <div class="ph"><h2 class="pt">👨‍🎓 O'quvchilar</h2><button class="btn bp" onclick="openM('ms')">+ O'quvchi qo'shish</button></div>
+    <div class="tbl">
+      <table><thead><tr><th>#</th><th>Ism Familiya</th><th>Telefon</th><th>Kurs</th><th>Holati</th><th>Amal</th></tr></thead>
+      <tbody id="stb"></tbody></table>
     </div>
   </div>
 
-  <!-- Modal: Kurs -->
-  <div v-if="showAddCourse" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-6 w-96 shadow-xl">
-      <h3 class="text-lg font-bold mb-4">Yangi Kurs</h3>
-      <input v-model="newCourse.name" placeholder="Kurs nomi" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <input v-model="newCourse.teacher" placeholder="O'qituvchi" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <input v-model.number="newCourse.price" type="number" placeholder="Oylik to'lov (so'm)" class="w-full border rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400" />
-      <div class="flex gap-3">
-        <button @click="addCourse" class="flex-1 bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">Qo'shish</button>
-        <button @click="showAddCourse=false" class="flex-1 bg-gray-100 py-2 rounded-xl">Bekor</button>
+  <!-- KURSLAR -->
+  <div id="pg-courses" class="page">
+    <div class="ph"><h2 class="pt">📚 Kurslar</h2><button class="btn bbl" onclick="openM('mc')">+ Kurs qo'shish</button></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px" id="courses-grid"></div>
+  </div>
+
+  <!-- DAVOMAT -->
+  <div id="pg-attend" class="page">
+    <h2 class="pt">✅ Davomat</h2>
+    <div class="tbl" style="padding:20px;margin-bottom:20px">
+      <div class="fr">
+        <div class="fg"><label>Sana</label><input type="date" id="att-date" onchange="renderAttend()"/></div>
+        <div class="fg"><label>Kurs</label><select id="att-course" onchange="renderAttend()"><option value="">Barchasi</option></select></div>
       </div>
+    </div>
+    <div class="tbl" style="padding:20px"><div id="att-list"></div></div>
+  </div>
+
+  <!-- TO'LOVLAR -->
+  <div id="pg-pays" class="page">
+    <div class="ph"><h2 class="pt">💳 To'lovlar</h2><button class="btn bp" onclick="openM('mp')">+ To'lov qo'shish</button></div>
+    <div class="tbl">
+      <table><thead><tr><th>O'quvchi</th><th>Kurs</th><th>Miqdor</th><th>Oy</th><th>Sana</th><th>Izoh</th></tr></thead>
+      <tbody id="ptb"></tbody></table>
     </div>
   </div>
 
-  <!-- Modal: To'lov -->
-  <div v-if="showAddPayment" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-6 w-96 shadow-xl">
-      <h3 class="text-lg font-bold mb-4">To'lov Qo'shish</h3>
-      <select v-model="newPayment.studentId" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-400">
-        <option value="">O'quvchi tanlang</option>
-        <option v-for="s in students" :key="s.id" :value="s.id">{{s.name}}</option>
-      </select>
-      <input v-model.number="newPayment.amount" type="number" placeholder="Miqdor (so'm)" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-400" />
-      <input v-model="newPayment.month" placeholder="Oy (masalan: Iyun 2026)" class="w-full border rounded-xl px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-400" />
-      <input v-model="newPayment.note" placeholder="Izoh" class="w-full border rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-purple-400" />
-      <div class="flex gap-3">
-        <button @click="addPayment" class="flex-1 bg-purple-600 text-white py-2 rounded-xl hover:bg-purple-700">Saqlash</button>
-        <button @click="showAddPayment=false" class="flex-1 bg-gray-100 py-2 rounded-xl">Bekor</button>
-      </div>
+  <!-- HISOBOT -->
+  <div id="pg-report" class="page">
+    <h2 class="pt">📈 Hisobot</h2>
+    <div class="cards" id="r-cards"></div>
+    <div class="tbl" style="padding:20px">
+      <h3 style="font-weight:700;margin-bottom:14px">Kurslar bo'yicha</h3>
+      <div id="r-courses"></div>
     </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<!-- Modal: O'quvchi -->
+<div class="modal-bg" id="modal-ms">
+  <div class="modal"><h3>👨‍🎓 Yangi O'quvchi</h3>
+    <div class="fr"><div class="fg"><label>Ism Familiya *</label><input id="s-name" placeholder="Ism Familiya"/></div><div class="fg"><label>Telefon</label><input id="s-phone" placeholder="+998"/></div></div>
+    <div class="fr"><div class="fg"><label>Kurs</label><select id="s-course"><option value="">Kurs tanlang</option></select></div><div class="fg"><label>Holati</label><select id="s-status"><option>Faol</option><option>Nofaol</option><option>Kutilmoqda</option></select></div></div>
+    <div class="mf"><button class="btn bp" onclick="addStudent()">Saqlash</button><button class="btn bgray" onclick="closeM('ms')">Bekor</button></div>
+  </div>
+</div>
+
+<!-- Modal: Kurs -->
+<div class="modal-bg" id="modal-mc">
+  <div class="modal"><h3>📚 Yangi Kurs</h3>
+    <div class="fr"><div class="fg"><label>Kurs nomi *</label><input id="c-name" placeholder="Masalan: Python dasturlash"/></div><div class="fg"><label>O'qituvchi</label><input id="c-teacher" placeholder="Ism"/></div></div>
+    <div class="fr"><div class="fg"><label>Oylik to'lov (so'm)</label><input id="c-price" type="number" placeholder="0"/></div><div class="fg"><label>Davomiyligi</label><input id="c-dur" placeholder="Masalan: 3 oy"/></div></div>
+    <div class="mf"><button class="btn bbl" onclick="addCourse()">Saqlash</button><button class="btn bgray" onclick="closeM('mc')">Bekor</button></div>
+  </div>
+</div>
+
+<!-- Modal: To'lov -->
+<div class="modal-bg" id="modal-mp">
+  <div class="modal"><h3>💳 To'lov Qo'shish</h3>
+    <div class="fg"><label>O'quvchi *</label><select id="p-sid"><option value="">O'quvchi tanlang</option></select></div>
+    <div class="fr"><div class="fg"><label>Miqdor (so'm) *</label><input id="p-amt" type="number" placeholder="0"/></div><div class="fg"><label>Oy</label><input id="p-month" placeholder="Iyun 2026"/></div></div>
+    <div class="fg"><label>Sana</label><input id="p-date" type="date"/></div>
+    <div class="fg"><label>Izoh</label><input id="p-note" placeholder="Ixtiyoriy"/></div>
+    <div class="mf"><button class="btn bp" onclick="addPayment()">Saqlash</button><button class="btn bgray" onclick="closeM('mp')">Bekor</button></div>
   </div>
 </div>
 
 <script>
-const { createApp, ref, computed } = Vue;
-createApp({
-  setup() {
-    const STORAGE = 'educore_data';
-    const load = () => JSON.parse(localStorage.getItem(STORAGE) || '{"students":[],"courses":[],"payments":[],"attendance":{}}');
-    const save = () => localStorage.setItem(STORAGE, JSON.stringify({ students: students.value, courses: courses.value, payments: payments.value, attendance: attendance.value }));
+const STORE='educore_v2';
+function load(){return JSON.parse(localStorage.getItem(STORE)||'{"students":[],"courses":[],"payments":[],"attendance":{}}');}
+function save(){localStorage.setItem(STORE,JSON.stringify(DB));}
+let DB=load();
+let attendance=DB.attendance||{};
 
-    const d = load();
-    const students = ref(d.students); const courses = ref(d.courses); const payments = ref(d.payments); const attendance = ref(d.attendance);
-    const page = ref('dashboard');
-    const menu = [{id:'dashboard',icon:'📊',label:'Dashboard'},{id:'students',icon:'👨‍🎓',label:"O'quvchilar"},{id:'courses',icon:'📚',label:'Kurslar'},{id:'attendance',icon:'✅',label:'Davomat'},{id:'payments',icon:'💳',label:"To'lovlar"}];
+const PAGES=[{id:'dash',icon:'📊',lbl:'Dashboard'},{id:'students',icon:'👨‍🎓',lbl:"O'quvchilar"},{id:'courses',icon:'📚',lbl:'Kurslar'},{id:'attend',icon:'✅',lbl:'Davomat'},{id:'pays',icon:'💳',lbl:"To'lovlar"},{id:'report',icon:'📈',lbl:'Hisobot'}];
 
-    // Students
-    const showAddStudent = ref(false);
-    const newStudent = ref({name:'',phone:'',course:'',status:'Faol'});
-    const addStudent = () => { if(!newStudent.value.name) return; students.value.push({...newStudent.value,id:Date.now()}); save(); showAddStudent.value=false; newStudent.value={name:'',phone:'',course:'',status:'Faol'}; };
-    const deleteStudent = id => { students.value=students.value.filter(s=>s.id!==id); save(); };
-    const studentsInCourse = name => students.value.filter(s=>s.course===name).length;
+function buildNav(){
+  document.getElementById('snav').innerHTML=PAGES.map(p=>`<button id="nb-${p.id}" onclick="go('${p.id}')">${p.icon} ${p.lbl}</button>`).join('');
+}
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#snav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  document.getElementById('nb-'+id).classList.add('active');
+  render(id);
+}
+function render(id){
+  if(id==='dash') renderDash();
+  else if(id==='students') renderStudents();
+  else if(id==='courses') renderCourses();
+  else if(id==='attend') renderAttend();
+  else if(id==='pays') renderPays();
+  else if(id==='report') renderReport();
+  updateStats();
+}
 
-    // Courses
-    const showAddCourse = ref(false);
-    const newCourse = ref({name:'',teacher:'',price:0});
-    const addCourse = () => { if(!newCourse.value.name) return; courses.value.push({...newCourse.value,id:Date.now()}); save(); showAddCourse.value=false; newCourse.value={name:'',teacher:'',price:0}; };
-    const deleteCourse = id => { courses.value=courses.value.filter(c=>c.id!==id); save(); };
+function toast(m,d=2500){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d);}
+function fmt(n){return Number(n||0).toLocaleString('uz-UZ');}
+function tod(){return new Date().toISOString().slice(0,10);}
 
-    // Attendance
-    const attendanceDate = ref(new Date().toISOString().slice(0,10));
-    const attendanceCourse = ref('');
-    const filteredStudents = computed(() => attendanceCourse.value ? students.value.filter(s=>s.course===attendanceCourse.value) : students.value);
-    const markAttendance = (sid, val) => { if(!attendance.value[attendanceDate.value]) attendance.value[attendanceDate.value]={}; attendance.value[attendanceDate.value][sid]=val; save(); };
-    const getAttendance = sid => attendance.value[attendanceDate.value]?.[sid] || '';
-
-    // Payments
-    const showAddPayment = ref(false);
-    const newPayment = ref({studentId:'',amount:0,month:'',note:''});
-    const addPayment = () => { const s=students.value.find(x=>x.id===newPayment.value.studentId); if(!s) return; payments.value.push({...newPayment.value,id:Date.now(),studentName:s.name,date:new Date().toLocaleDateString('uz-UZ')}); save(); showAddPayment.value=false; newPayment.value={studentId:'',amount:0,month:'',note:''}; };
-    const totalRevenue = computed(() => payments.value.reduce((s,p)=>s+p.amount,0));
-
-    return { page,menu,students,courses,payments,attendance,showAddStudent,newStudent,addStudent,deleteStudent,studentsInCourse,showAddCourse,newCourse,addCourse,deleteCourse,attendanceDate,attendanceCourse,filteredStudents,markAttendance,getAttendance,showAddPayment,newPayment,addPayment,totalRevenue };
+function openM(id){
+  document.getElementById('modal-'+id).classList.add('open');
+  if(id==='ms'){const s=document.getElementById('s-course');s.innerHTML='<option value="">Kurs tanlang</option>'+DB.courses.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');}
+  if(id==='mp'){
+    document.getElementById('p-sid').innerHTML='<option value="">O\'quvchi tanlang</option>'+DB.students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+    document.getElementById('p-date').value=tod();
+    const m=new Date();document.getElementById('p-month').value=m.toLocaleString('uz-UZ',{month:'long'})+' '+m.getFullYear();
   }
-}).mount('#app');
+}
+function closeM(id){document.getElementById('modal-'+id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// STUDENTS
+function addStudent(){
+  const name=document.getElementById('s-name').value.trim();
+  if(!name)return toast('❌ Ism kiritilmagan!');
+  DB.students.push({id:Date.now(),name,phone:document.getElementById('s-phone').value.trim(),course:document.getElementById('s-course').value,courseId:+document.getElementById('s-course').value,status:document.getElementById('s-status').value});
+  save();closeM('ms');renderStudents();updateStats();toast('✅ O\'quvchi qo\'shildi');
+  ['s-name','s-phone'].forEach(x=>document.getElementById(x).value='');
+}
+function deleteStudent(id){
+  if(!confirm('O\'quvchini o\'chirasizmi?'))return;
+  DB.students=DB.students.filter(s=>s.id!==id);
+  DB.payments=DB.payments.filter(p=>p.sid!==id);
+  save();renderStudents();updateStats();toast('🗑️ O\'chirildi');
+}
+function renderStudents(){
+  const tb=document.getElementById('stb');
+  if(!DB.students.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:#94a3b8">O\'quvchi yo\'q</td></tr>';return;}
+  tb.innerHTML=DB.students.map((s,i)=>{
+    const c=DB.courses.find(x=>x.id==s.courseId);
+    const badge=s.status==='Faol'?'bg':s.status==='Nofaol'?'br':'by';
+    return `<tr><td>${i+1}</td><td><strong>${s.name}</strong></td><td>${s.phone||'—'}</td><td>${c?c.name:s.course||'—'}</td><td><span class="badge ${badge}">${s.status}</span></td><td><button class="btn bgray" style="padding:5px 12px;font-size:12px" onclick="deleteStudent(${s.id})">O'chirish</button></td></tr>`;
+  }).join('');
+}
+
+// COURSES
+function addCourse(){
+  const name=document.getElementById('c-name').value.trim();
+  if(!name)return toast('❌ Kurs nomi kiritilmagan!');
+  DB.courses.push({id:Date.now(),name,teacher:document.getElementById('c-teacher').value.trim(),price:+document.getElementById('c-price').value||0,dur:document.getElementById('c-dur').value.trim()});
+  save();closeM('mc');renderCourses();updateStats();toast('✅ Kurs qo\'shildi');
+  ['c-name','c-teacher','c-price','c-dur'].forEach(x=>document.getElementById(x).value='');
+}
+function deleteCourse(id){
+  if(!confirm('Kursni o\'chirasizmi?'))return;
+  DB.courses=DB.courses.filter(c=>c.id!==id);
+  save();renderCourses();updateStats();toast('🗑️ O\'chirildi');
+}
+function renderCourses(){
+  const g=document.getElementById('courses-grid');
+  if(!DB.courses.length){g.innerHTML='<div style="color:#94a3b8;padding:30px;text-align:center">Kurs yo\'q. "+ Kurs qo\'shish" tugmasini bosing.</div>';return;}
+  g.innerHTML=DB.courses.map(c=>{
+    const cnt=DB.students.filter(s=>s.courseId==c.id).length;
+    const pct=Math.min(cnt/Math.max(DB.students.length,1)*100,100);
+    return `<div class="tbl" style="padding:20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <h3 style="font-weight:700;font-size:16px;color:#1e293b">${c.name}</h3>
+        <button class="btn bgray" style="padding:4px 10px;font-size:12px" onclick="deleteCourse(${c.id})">✕</button>
+      </div>
+      <p style="color:#64748b;font-size:13px;margin-bottom:6px">👨‍🏫 ${c.teacher||'—'} ${c.dur?'· '+c.dur:''}</p>
+      <p style="font-size:14px;margin-bottom:10px">💰 <strong>${fmt(c.price)}</strong> so'm/oy</p>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:#64748b;margin-bottom:4px"><span>O'quvchilar</span><span style="font-weight:700;color:#065f46">${cnt} kishi</span></div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ATTENDANCE
+function renderAttend(){
+  const dt=document.getElementById('att-date').value||tod();
+  document.getElementById('att-date').value=dt;
+  const courseFilter=document.getElementById('att-course').value;
+  const sel=document.getElementById('att-course');
+  sel.innerHTML='<option value="">Barchasi</option>'+DB.courses.map(c=>`<option value="${c.id}" ${courseFilter==c.id?'selected':''}>${c.name}</option>`).join('');
+  if(courseFilter)sel.value=courseFilter;
+  const students=courseFilter?DB.students.filter(s=>s.courseId==courseFilter):DB.students;
+  const dayAtt=attendance[dt]||{};
+  const el=document.getElementById('att-list');
+  if(!students.length){el.innerHTML='<p style="color:#94a3b8;padding:20px;text-align:center">O\'quvchi yo\'q</p>';return;}
+  el.innerHTML=students.map(s=>{
+    const val=dayAtt[s.id]||'';
+    return `<div class="attend-row">
+      <div><strong>${s.name}</strong><span style="font-size:12px;color:#64748b;margin-left:8px">${DB.courses.find(c=>c.id==s.courseId)?.name||''}</span></div>
+      <div class="attend-btns">
+        <button class="att-present ${val==='present'?'active':''}" onclick="markAtt('${dt}',${s.id},'present')">✓ Keldi</button>
+        <button class="att-absent ${val==='absent'?'active':''}" onclick="markAtt('${dt}',${s.id},'absent')">✗ Kelmadi</button>
+      </div>
+    </div>`;
+  }).join('');
+  // stats
+  const present=Object.values(dayAtt).filter(v=>v==='present').length;
+  const absent=Object.values(dayAtt).filter(v=>v==='absent').length;
+  el.innerHTML+=`<div style="margin-top:14px;padding-top:14px;border-top:2px solid #e2e8f0;display:flex;gap:12px">
+    <span class="badge bg">✓ Keldi: ${present}</span>
+    <span class="badge br">✗ Kelmadi: ${absent}</span>
+    <span class="badge bgr">Belgilanmagan: ${students.length-present-absent}</span>
+  </div>`;
+}
+function markAtt(dt,sid,val){
+  if(!attendance[dt])attendance[dt]={};
+  attendance[dt][sid]=attendance[dt][sid]===val?'':val;
+  DB.attendance=attendance;save();renderAttend();
+}
+
+// PAYMENTS
+function addPayment(){
+  const sid=+document.getElementById('p-sid').value;
+  const amt=+document.getElementById('p-amt').value;
+  if(!sid||amt<1)return toast('❌ Ma\'lumot to\'liq emas!');
+  const s=DB.students.find(x=>x.id===sid);if(!s)return;
+  const c=DB.courses.find(x=>x.id==s.courseId);
+  DB.payments.push({id:Date.now(),sid,name:s.name,course:c?c.name:'—',amount:amt,month:document.getElementById('p-month').value,date:document.getElementById('p-date').value||tod(),note:document.getElementById('p-note').value.trim()});
+  save();closeM('mp');renderPays();updateStats();toast('✅ To\'lov qo\'shildi');
+  ['p-amt','p-note'].forEach(x=>document.getElementById(x).value='');
+}
+function renderPays(){
+  const tb=document.getElementById('ptb');
+  if(!DB.payments.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:30px;color:#94a3b8">To\'lov yo\'q</td></tr>';return;}
+  tb.innerHTML=[...DB.payments].reverse().map(p=>
+    `<tr><td><strong>${p.name}</strong></td><td>${p.course}</td><td style="color:#065f46;font-weight:700">${fmt(p.amount)} so'm</td><td>${p.month}</td><td>${p.date}</td><td>${p.note||'—'}</td></tr>`
+  ).join('');
+}
+
+// DASHBOARD
+function renderDash(){
+  const total=DB.students.length;
+  const active=DB.students.filter(s=>s.status==='Faol').length;
+  const rev=DB.payments.reduce((s,p)=>s+p.amount,0);
+  document.getElementById('d-cards').innerHTML=`
+    <div class="card"><div class="v">${total}</div><div class="l">Jami o'quvchi</div></div>
+    <div class="card g"><div class="v">${active}</div><div class="l">Faol o'quvchi</div></div>
+    <div class="card p"><div class="v">${DB.courses.length}</div><div class="l">Kurslar</div></div>
+    <div class="card o"><div class="v">${fmt(rev)}</div><div class="l">Jami daromad</div></div>
+  `;
+  document.getElementById('d-students').innerHTML=[...DB.students].slice(-5).reverse().map(s=>
+    `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9">
+      <div style="width:36px;height:36px;border-radius:50%;background:#d1fae5;display:flex;align-items:center;justify-content:center;font-weight:700;color:#065f46">${s.name[0]}</div>
+      <div><div style="font-size:14px;font-weight:600">${s.name}</div><div style="font-size:12px;color:#64748b">${DB.courses.find(c=>c.id==s.courseId)?.name||'—'}</div></div>
+    </div>`
+  ).join('')||'<p style="color:#94a3b8;padding:10px">O\'quvchi yo\'q</p>';
+  document.getElementById('d-pays').innerHTML=[...DB.payments].reverse().slice(0,5).map(p=>
+    `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:14px"><span>${p.name}</span><span style="color:#065f46;font-weight:700">${fmt(p.amount)} so'm</span></div>`
+  ).join('')||'<p style="color:#94a3b8;padding:10px">To\'lov yo\'q</p>';
+}
+
+// REPORT
+function renderReport(){
+  const rev=DB.payments.reduce((s,p)=>s+p.amount,0);
+  document.getElementById('r-cards').innerHTML=`
+    <div class="card g"><div class="v">${DB.students.length}</div><div class="l">O'quvchilar</div></div>
+    <div class="card p"><div class="v">${fmt(rev)}</div><div class="l">Daromad (so'm)</div></div>
+    <div class="card"><div class="v">${DB.courses.length}</div><div class="l">Kurslar</div></div>
+    <div class="card o"><div class="v">${DB.payments.length}</div><div class="l">To'lovlar</div></div>
+  `;
+  document.getElementById('r-courses').innerHTML=DB.courses.map(c=>{
+    const students=DB.students.filter(s=>s.courseId==c.id).length;
+    const income=DB.payments.filter(p=>DB.students.find(s=>s.id==p.sid&&s.courseId==c.id)).reduce((s,p)=>s+p.amount,0);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f1f5f9">
+      <div><div style="font-weight:600">${c.name}</div><div style="font-size:12px;color:#64748b">${c.teacher||''}</div></div>
+      <div style="text-align:right"><div style="font-weight:700;color:#065f46">${fmt(income)} so'm</div><div style="font-size:12px;color:#64748b">${students} o'quvchi</div></div>
+    </div>`;
+  }).join('')||'<p style="color:#94a3b8;padding:20px;text-align:center">Ma\'lumot yo\'q</p>';
+}
+
+function updateStats(){
+  document.getElementById('sstat').innerHTML=`O'quvchilar: <strong>${DB.students.length}</strong><br>Faol: <strong>${DB.students.filter(s=>s.status==='Faol').length}</strong><br>Kurslar: <strong>${DB.courses.length}</strong>`;
+}
+
+buildNav();go('dash');
 </script>
 </body>
 </html>
